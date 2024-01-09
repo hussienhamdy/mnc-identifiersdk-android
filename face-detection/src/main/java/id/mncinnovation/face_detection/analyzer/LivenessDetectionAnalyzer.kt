@@ -86,6 +86,8 @@ class LivenessDetectionAnalyzer(
             DetectionMode.BLINK,
             DetectionMode.SMILE,
             DetectionMode.SHAKE_HEAD,
+            DetectionMode.TURN_RIGHT,
+            DetectionMode.TURN_LEFT,
             DetectionMode.HOLD_STILL -> {
                 classificationDetector.process(inputImage)
                     .addOnSuccessListener { faces ->
@@ -133,6 +135,8 @@ class LivenessDetectionAnalyzer(
         when (detectionMode) {
             DetectionMode.BLINK -> detectBlink(face)
             DetectionMode.SHAKE_HEAD -> detectShakeHead(face)
+            DetectionMode.TURN_LEFT -> detectTurnLeft(face)
+            DetectionMode.TURN_RIGHT -> detectTurnRight(face)
             DetectionMode.OPEN_MOUTH -> detectMouthOpen(face)
             DetectionMode.SMILE -> detectSmile(face)
             DetectionMode.HOLD_STILL -> detectHoldStill(face)
@@ -192,6 +196,18 @@ class LivenessDetectionAnalyzer(
     private fun detectShakeHead(face: Face) {
         Log.d(TAG, "HeadEulerAngleY ${face.headEulerAngleY}")
         if (face.headEulerAngleY > 30 || face.headEulerAngleY < -30) {
+            nextDetection()
+        }
+    }
+
+    private fun detectTurnRight(face: Face) {
+        if (face.headEulerAngleY < -30) {
+            nextDetection()
+        }
+    }
+
+    private fun detectTurnLeft(face: Face) {
+        if (face.headEulerAngleY > 30) {
             nextDetection()
         }
     }
@@ -275,7 +291,7 @@ class LivenessDetectionAnalyzer(
 }
 
 enum class DetectionMode {
-    BLINK, SHAKE_HEAD, OPEN_MOUTH, SMILE, HOLD_STILL
+    BLINK, SHAKE_HEAD, OPEN_MOUTH, SMILE, HOLD_STILL, TURN_RIGHT, TURN_LEFT
 }
 
 enum class FaceStatus {

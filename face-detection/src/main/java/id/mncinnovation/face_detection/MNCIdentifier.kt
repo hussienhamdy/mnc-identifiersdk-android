@@ -16,7 +16,9 @@ object MNCIdentifier {
         DetectionMode.OPEN_MOUTH,
         DetectionMode.BLINK,
         DetectionMode.SHAKE_HEAD,
-        DetectionMode.SMILE
+        DetectionMode.SMILE,
+        DetectionMode.TURN_RIGHT,
+        DetectionMode.TURN_LEFT
     )
 
     @JvmStatic
@@ -34,7 +36,7 @@ object MNCIdentifier {
     @JvmStatic
     fun getLivenessIntent(context: Context): Intent {
         attempt++
-        return Intent(context, SplashLivenessActivity::class.java)
+        return Intent(context, LivenessDetectionActivity::class.java)
     }
 
     @JvmStatic

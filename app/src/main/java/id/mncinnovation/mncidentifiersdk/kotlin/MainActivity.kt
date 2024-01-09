@@ -22,6 +22,7 @@ import id.mncinnovation.ocr.MNCIdentifierOCR
 import id.mncinnovation.ocr.ScanOCRActivity
 import id.mncinnovation.ocr.model.OCRResultModel
 import java.io.File
+import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,11 +35,30 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        MNCIdentifier.setDetectionModeSequence(
-            false, listOf(
-                DetectionMode.HOLD_STILL,
-                DetectionMode.BLINK,
-            )
+        val detectionModes = mutableListOf(
+            DetectionMode.HOLD_STILL
+        )
+        var random = 0;
+        for (i in 1 until 3) {
+            random = Random.nextInt(4);
+            Log.d("tag","random random $random");
+            when (random) {
+                0 -> {
+                    detectionModes.add(i, DetectionMode.TURN_RIGHT)
+                }
+                1 -> {
+                    detectionModes.add(i, DetectionMode.TURN_LEFT)
+                }
+                2 -> {
+                    detectionModes.add(i, DetectionMode.SMILE)
+                }
+                else -> {
+                    detectionModes.add(i, DetectionMode.BLINK)
+                }
+            }
+        }
+                MNCIdentifier.setDetectionModeSequence(
+            true, detectionModes
         )
         MNCIdentifier.setLowMemoryThreshold(50) // for face detection
 
